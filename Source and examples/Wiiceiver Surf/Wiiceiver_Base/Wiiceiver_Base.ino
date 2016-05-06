@@ -301,7 +301,7 @@ void handleInactivity() {
 
 
 void setup() {
-  wdt_disable();
+  wdt_disable();//disable watch dog
   Serial.begin(115200);
 
   Serial.print(F("Wiiceiver Surf Base v "));
@@ -311,17 +311,17 @@ void setup() {
   Serial.print(F(" "));
   Serial.print(F(__TIME__));
   Serial.println(F(")"));
-  display_WDC();  
-  readSettings();
+  display_WDC(); // display the current watchdog counter  
+  readSettings(); // read settings from EEPROM
   
   green.init(pinLocation(GREEN_LED_ID));
   red.init(pinLocation(RED_LED_ID));
 
-  setup_pins();
-  ESC.init(pinLocation(ESC_PPM_ID), pinLocation(ESC2_PPM_ID));
+  setup_pins();// Do nothing
+  ESC.init(pinLocation(ESC_PPM_ID), pinLocation(ESC2_PPM_ID));// init the ElectronicSpeedController
   
-  splashScreen();
-  showTunaSettings();
+  splashScreen();// an amazing light show - Nothing Important
+  showTunaSettings(); // print all the setting from the EEPROM
 
   #ifdef DEBUGGING
     Serial.println(F("Starting the nunchuck ..."));
@@ -329,11 +329,11 @@ void setup() {
   delay(10);
   green.high();
   red.high();
-  setup_txmitter();
-  if (! startChuck()) {
+  setup_txmitter();// init the RHReliableDatagram instance
+  if (! startChuck()) { //returns true if the chuck appears "active"
  /*   maybeCalibrate();
   } else {*/
-    handleInactivity();
+    handleInactivity();// try to restart the chuck
   }
   #ifdef DEBUGGING
     Serial.println(F("Nunchuck is active!"));
@@ -344,8 +344,8 @@ void setup() {
   
   green.update(1);
   red.update(1);
-  watchdog_setup(WDTO_250MS);
-  throttle.init();
+  watchdog_setup(WDTO_250MS);// active the watch dog
+  throttle.init();// init the throttle 
 } // setup()
 
 
@@ -358,7 +358,7 @@ void loop() {
   SoftwareServo::refresh();
   green.run();
   red.run();
-  chuck.update();
+  chuck.update();// get the data from the chuck
 
   // check for the tuning UI
   tuna();
